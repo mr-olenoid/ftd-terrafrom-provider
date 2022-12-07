@@ -14,7 +14,7 @@ func resourceInterface() *schema.Resource {
 		ReadContext:   resourceInterfaceRead,
 		UpdateContext: resourceInterfaceUpdate,
 		DeleteContext: resourceInterfaceDelete,
-		Description:   "Cisco FTD phisical interface assign correct name during creation and it will be imported",
+		Description:   "Cisco FTD phisical interface shoud be imported for correct work",
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:     schema.TypeString,
@@ -64,6 +64,7 @@ func resourceInterface() *schema.Resource {
 						"ipaddress": {
 							Type:     schema.TypeList,
 							Optional: true,
+							Computed: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -89,7 +90,7 @@ func resourceInterface() *schema.Resource {
 						},
 						"dhcp": {
 							Type:     schema.TypeBool,
-							Optional: true,
+							Computed: true,
 						},
 						"addressnull": {
 							Type:     schema.TypeBool,

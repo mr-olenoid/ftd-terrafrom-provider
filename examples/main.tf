@@ -24,6 +24,13 @@ resource "ftd_security_zone" "ft_sz" {
 resource "ftd_security_zone" "ft_sz_outside" {
   name = "imported"
   mode = "ROUTED"
+  /*
+  interfaces {
+    id = ftd_interface.outside.id
+    name = ftd_interface.outside.name
+    type = ftd_interface.outside.type
+  }
+  */
 }
 
 resource "ftd_network_object" "tf_ip_address" {
@@ -32,33 +39,38 @@ resource "ftd_network_object" "tf_ip_address" {
   value = "10.0.0.1"
   type = "networkobject"
 }
-/*
+
 resource "ftd_security_zone" "ft_sz_default_outside" {
   name = "outside_zone"
   mode = "ROUTED"
+  
+  interfaces {
+    id = ftd_interface.outside.id
+    name = ftd_interface.outside.name
+    type = ftd_interface.outside.type
+  }
+  
 }
-*/
+
 
 resource "ftd_interface" "outside" {
   name = "outside"
   mode = "ROUTED"
   type = "physicalinterface"
   monitorinterface = true
-  description = "Hello from"
+  description = "Hello from terraform"
   ctsenabled = true
   gigabitinterface = true
   present = true
   ipv4 {
       addressnull = false
       defaultrouteusingdhcp = true
-      dhcp = true
       dhcproutemetric = 0
-      iptype = "DHCP"
+      iptype = "STATIC"
       type = "interfaceipv4"
       ipaddress {
-          ipaddress = "10.100.16.181"
-          netmask = "255.255.255.0"
-          type = "haipv4address"
-        }
+        ipaddress = "192.168.33.11"
+        netmask = "255.255.255.0"
+      }
     }
 }
