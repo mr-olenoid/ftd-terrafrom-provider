@@ -22,3 +22,41 @@ func flattenReferenceModel(items *[]ftdc.ReferenceModel) []interface{} {
 
 	return make([]interface{}, 0)
 }
+
+func flattenInterfaceIPv4(item *ftdc.InterfaceIPv4) []interface{} {
+	if item != nil {
+		oi := make(map[string]interface{})
+
+		oi["iptype"] = item.IpType
+		oi["defaultrouteusingdhcp"] = item.DefaultRouteUsingDHCP
+		oi["dhcproutemetric"] = item.DhcpRouteMetric
+		oi["ipaddress"] = flattenHAIPv4Address(&item.IpAddress)
+		oi["dhcp"] = item.Dhcp
+		oi["addressnull"] = item.AddressNull
+		oi["type"] = item.Type
+
+		ois := make([]interface{}, 1)
+		ois[0] = oi
+
+		return ois
+	}
+
+	return nil
+}
+
+func flattenHAIPv4Address(item *ftdc.HAIPv4Address) []interface{} {
+	if item != nil {
+		oi := make(map[string]interface{})
+		oi["ipaddress"] = item.IpAddress
+		oi["netmask"] = item.Netmask
+		oi["standbyipaddress"] = item.StandbyIpAddress
+		oi["type"] = item.Type
+
+		ois := make([]interface{}, 1)
+		ois[0] = oi
+
+		return ois
+	}
+
+	return nil
+}

@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	ftdc "github.com/mr-olenoid/ftd-client"
 )
 
 func resourceInterface() *schema.Resource {
@@ -44,7 +45,8 @@ func resourceInterface() *schema.Resource {
 			},
 			"ipv4": {
 				Type:     schema.TypeList,
-				Required: true,
+				Optional: true,
+				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"iptype": {
@@ -62,6 +64,7 @@ func resourceInterface() *schema.Resource {
 						"ipaddress": {
 							Type:     schema.TypeList,
 							Optional: true,
+							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"ipaddress": {
@@ -78,11 +81,24 @@ func resourceInterface() *schema.Resource {
 									},
 									"type": {
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 										Default:  "haipv4address",
 									},
 								},
 							},
+						},
+						"dhcp": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+						"addressnull": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+						"type": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "interfaceipv4",
 						},
 					},
 				},
@@ -97,19 +113,19 @@ func resourceInterface() *schema.Resource {
 			},
 			"mode": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 				Description: "Allowed values: PASSIVE, ROUTED, SWITCHPORT, BRIDGEGROUPMEMBER. Default ROUTED",
 				Default:     "ROUTED",
 			},
 			"mtu": {
 				Type:        schema.TypeInt,
-				Required:    true,
+				Optional:    true,
 				Description: " A mandatory Integer value, from 64 bytes to 9198 bytes, with a default value being set to 1500.",
 				Default:     1500,
 			},
 			"enabled": {
 				Type:        schema.TypeBool,
-				Required:    true,
+				Optional:    true,
 				Description: "A mandatory Boolean value, TRUE or FALSE (the default), specifies the administrative status of the Interface.",
 				Default:     true,
 			},
@@ -144,7 +160,7 @@ func resourceInterface() *schema.Resource {
 				Description: "An enum value that specifies the Interface Duplex Type, where AUTO is the default. Values can be one of the following [AUTO, HALF, FULL, IGNORE]",
 				Default:     "AUTO",
 			},
-			"AutoNeg": {
+			"autoneg": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Description: "A boolean value to configure auto-negotiation on a physical interface. Auto-negotiation values depend on your platform. Values on supported platforms are true/false.",
@@ -172,56 +188,168 @@ func resourceInterface() *schema.Resource {
 			},
 			"type": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 				Default:  "physicalinterface",
 			},
-			"securityzone": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"type": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
+		},
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 	}
 }
 
 func resourceInterfaceCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	//c := m.(*ftdc.Client)
-
+	c := m.(*ftdc.Client)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+
+	iface, err := c.CreateNetworkInterface(d.Get("name").(string))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.Set("id", iface.ID)
+	d.Set("name", iface.Name)
+	d.Set("version", iface.Version)
+	d.Set("description", iface.Description)
+	d.Set("hardwarename", iface.HardwareName)
+	d.Set("monitorinterface", iface.MonitorInterface)
+
+	ipv4 := flattenInterfaceIPv4(&iface.Ipv4)
+	if err := d.Set("ipv4", ipv4); err != nil {
+		return diag.FromErr(err)
+	}
+	d.Set("managementonly", iface.ManagementOnly)
+	d.Set("managementinterface", iface.ManagementInterface)
+	d.Set("mode", iface.Mode)
+	d.Set("mtu", iface.Mtu)
+	d.Set("enabled", iface.Enabled)
+	d.Set("macaddress", iface.MacAddress)
+	d.Set("standbymacaddress", iface.StandbyMacAddress)
+
+	d.Set("ctsenabled", iface.CtsEnabled)
+	d.Set("fecmode", iface.FecMode)
+	d.Set("speedtype", iface.SpeedType)
+	d.Set("duplextype", iface.DuplexType)
+
+	d.Set("autoneg", iface.AutoNeg)
+	d.Set("breakoutcapable", iface.BreakOutCapable)
+	d.Set("present", iface.Present)
+	d.Set("splitinterface", iface.SplitInterface)
+	d.Set("tengigabitinterface", iface.TenGigabitInterface)
+	d.Set("gigabitinterface", iface.GigabitInterface)
+	d.Set("type", iface.Type)
 
 	return diags
 }
 
 func resourceInterfaceRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	//c := m.(*ftdc.Client)
+	c := m.(*ftdc.Client)
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+
+	iface, err := c.GetNetworkInterface(d.Get("id").(string))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.Set("id", iface.ID)
+	d.Set("name", iface.Name)
+	d.Set("version", iface.Version)
+	d.Set("description", iface.Description)
+	d.Set("hardwarename", iface.HardwareName)
+	d.Set("monitorinterface", iface.MonitorInterface)
+
+	ipv4 := flattenInterfaceIPv4(&iface.Ipv4)
+	if err := d.Set("ipv4", ipv4); err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.Set("managementonly", iface.ManagementOnly)
+	d.Set("managementinterface", iface.ManagementInterface)
+	d.Set("mode", iface.Mode)
+	d.Set("mtu", iface.Mtu)
+	d.Set("enabled", iface.Enabled)
+	d.Set("macaddress", iface.MacAddress)
+	d.Set("standbymacaddress", iface.StandbyMacAddress)
+
+	d.Set("ctsenabled", iface.CtsEnabled)
+	d.Set("fecmode", iface.FecMode)
+	d.Set("speedtype", iface.SpeedType)
+	d.Set("duplextype", iface.DuplexType)
+
+	d.Set("autoneg", iface.AutoNeg)
+	d.Set("breakoutcapable", iface.BreakOutCapable)
+	d.Set("present", iface.Present)
+	d.Set("splitinterface", iface.SplitInterface)
+	d.Set("tengigabitinterface", iface.TenGigabitInterface)
+	d.Set("gigabitinterface", iface.GigabitInterface)
+	d.Set("type", iface.Type)
 
 	return diags
 }
 
 func resourceInterfaceUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	//c := m.(*ftdc.Client)
+	c := m.(*ftdc.Client)
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+
+	var networkInterface ftdc.NetworkInterface
+
+	networkInterface.ID = d.Get("id").(string)
+	networkInterface.Name = d.Get("name").(string)
+	networkInterface.Version = d.Get("version").(string)
+	networkInterface.Description = d.Get("description").(string)
+	networkInterface.HardwareName = d.Get("hardwarename").(string)
+	networkInterface.MonitorInterface = d.Get("monitorinterface").(bool)
+
+	ipv4s := d.Get("ipv4").([]interface{})[0]
+	ipv4 := ipv4s.(map[string]interface{})
+	networkInterface.Ipv4.IpType = ipv4["iptype"].(string)
+	networkInterface.Ipv4.DefaultRouteUsingDHCP = ipv4["defaultrouteusingdhcp"].(bool)
+	networkInterface.Ipv4.DhcpRouteMetric = ipv4["dhcproutemetric"].(int)
+	networkInterface.Ipv4.Dhcp = ipv4["dhcp"].(bool)
+	networkInterface.Ipv4.AddressNull = ipv4["addressnull"].(bool)
+	networkInterface.Ipv4.Type = ipv4["type"].(string)
+
+	ipAddresses := ipv4["ipaddress"].([]interface{})[0]
+	ipAddress := ipAddresses.(map[string]interface{})
+	networkInterface.Ipv4.IpAddress.IpAddress = ipAddress["ipaddress"].(string)
+	networkInterface.Ipv4.IpAddress.Netmask = ipAddress["netmask"].(string)
+	networkInterface.Ipv4.IpAddress.StandbyIpAddress = ipAddress["standbyipaddress"].(string)
+	networkInterface.Ipv4.IpAddress.Type = ipAddress["type"].(string)
+
+	networkInterface.ManagementOnly = d.Get("managementonly").(bool)
+	networkInterface.ManagementInterface = d.Get("managementinterface").(bool)
+	networkInterface.Mode = d.Get("mode").(string)
+	networkInterface.Mtu = d.Get("mtu").(int)
+	networkInterface.Enabled = d.Get("enabled").(bool)
+	networkInterface.MacAddress = d.Get("macaddress").(string)
+	networkInterface.StandbyMacAddress = d.Get("standbymacaddress").(string)
+
+	networkInterface.CtsEnabled = d.Get("ctsenabled").(bool)
+	networkInterface.FecMode = d.Get("fecmode").(string)
+	networkInterface.SpeedType = d.Get("speedtype").(string)
+	networkInterface.DuplexType = d.Get("duplextype").(string)
+
+	networkInterface.AutoNeg = d.Get("autoneg").(bool)
+	networkInterface.BreakOutCapable = d.Get("breakoutcapable").(bool)
+	networkInterface.Present = d.Get("present").(bool)
+	networkInterface.SplitInterface = d.Get("splitinterface").(bool)
+	networkInterface.TenGigabitInterface = d.Get("tengigabitinterface").(bool)
+	networkInterface.GigabitInterface = d.Get("gigabitinterface").(bool)
+	networkInterface.Type = d.Get("type").(string)
+
+	n, err := c.UpdateNetworkInterface(networkInterface)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.SetId(n.ID)
+
+	resourceSecurityZoneRead(ctx, d, m)
 
 	return diags
 }

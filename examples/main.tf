@@ -38,3 +38,27 @@ resource "ftd_security_zone" "ft_sz_default_outside" {
   mode = "ROUTED"
 }
 */
+
+resource "ftd_interface" "outside" {
+  name = "outside"
+  mode = "ROUTED"
+  type = "physicalinterface"
+  monitorinterface = true
+  description = "Hello from"
+  ctsenabled = true
+  gigabitinterface = true
+  present = true
+  ipv4 {
+      addressnull = false
+      defaultrouteusingdhcp = true
+      dhcp = true
+      dhcproutemetric = 0
+      iptype = "DHCP"
+      type = "interfaceipv4"
+      ipaddress {
+          ipaddress = "10.100.16.181"
+          netmask = "255.255.255.0"
+          type = "haipv4address"
+        }
+    }
+}
