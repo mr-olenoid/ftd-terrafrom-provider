@@ -15,45 +15,51 @@ func resourceSecurityZone() *schema.Resource {
 		UpdateContext: resourceSecurityZoneUpdate,
 		DeleteContext: resourceSecurityZoneDelete,
 		Schema: map[string]*schema.Schema{
-			"id": &schema.Schema{
-				Type:     schema.TypeString,
-				Computed: true,
+			"id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A unique string identifier assigned by the system when the object is created. No assumption can be made on the format or content of this identifier. The identifier must be provided whenever attempting to modify/delete (or reference) an existing object.",
 			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+			"name": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "A string containing the name of the object, up to 48 characters in length",
 			},
-			"version": &schema.Schema{
-				Type:     schema.TypeString,
-				Computed: true,
+			"version": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A unique string version assigned by the system when the object is created or modified. No assumption can be made on the format or content of this identifier. The identifier must be provided whenever attempting to modify/delete an existing object. As the version will change every time the object is modified, the value provided in this identifier must match exactly what is present in the system or the request will be rejected.",
 			},
-			"description": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
+			"description": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "A string containing a description of the object, up to 200 characters in length",
 			},
-			"mode": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+			"mode": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "An enum value that specifies the security zone mode which should correspond to mode of selected Physical Interface ['PASSIVE', 'ROUTED', 'SWITCHPORT', 'BRIDGEGROUPMEMBER']",
 			},
-			"type": &schema.Schema{
+			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "securityzone",
 			},
-			"interfaces": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
+			"interfaces": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "A list of interfaces used inside this security zone. Allowed types are: [EtherChannelInterface, PhysicalInterface, SubInterface, VirtualTunnelInterface, VlanInterface]",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"id": &schema.Schema{
+						"id": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"type": &schema.Schema{
+						"type": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"name": &schema.Schema{
+						"name": {
 							Type:     schema.TypeString,
 							Optional: true,
 						},

@@ -56,7 +56,6 @@ resource "ftd_security_zone" "ft_sz_default_outside" {
 resource "ftd_interface" "outside" {
   name = "outside"
   mode = "ROUTED"
-  type = "physicalinterface"
   monitorinterface = true
   description = "Hello from terraform"
   ctsenabled = true
