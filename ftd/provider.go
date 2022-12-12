@@ -35,6 +35,7 @@ func Provider() *schema.Provider {
 			"ftd_security_zone":  resourceSecurityZone(),
 			"ftd_network_object": resourceNetworkObject(),
 			"ftd_interface":      resourceInterface(),
+			"ftd_access_rule":    resourceAccessRule(),
 		},
 		DataSourcesMap:       map[string]*schema.Resource{},
 		ConfigureContextFunc: providerConfigure,

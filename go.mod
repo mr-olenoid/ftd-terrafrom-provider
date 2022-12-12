@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.1
-	github.com/mr-olenoid/ftd-client v0.1.6
+	github.com/mr-olenoid/ftd-client v0.1.10
 )
 
 require (
