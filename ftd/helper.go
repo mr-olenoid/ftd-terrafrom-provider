@@ -1,6 +1,7 @@
 package ftd
 
 import (
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	ftdc "github.com/mr-olenoid/ftd-client"
 )
 
@@ -9,6 +10,10 @@ func flattenReferenceModel(items *[]ftdc.ReferenceModel) []interface{} {
 		ois := make([]interface{}, len(*items))
 
 		for i, item := range *items {
+			//empty object checker
+			if item.Type == "" {
+				return nil
+			}
 			oi := make(map[string]interface{})
 
 			oi["id"] = item.ID
@@ -83,7 +88,7 @@ func flattenUsers(items *[]ftdc.TrafficEntry) []interface{} {
 }
 
 func flattenEmbeddedAppFilter(item *ftdc.EmbeddedAppFilter) []interface{} {
-	if item != nil {
+	if item != nil && item.Type != "" {
 		oi := make(map[string]interface{})
 
 		oi["type"] = item.Type
@@ -146,10 +151,9 @@ func flattenConditions(conditions *[]ftdc.ApplicationFilterCondition) []interfac
 	return make([]interface{}, 0)
 }
 
-func flattenurlFilter(filter *ftdc.EmbeddedURLFilter) []interface{} {
-	if filter != nil {
+func flattenUrlFilter(filter *ftdc.EmbeddedURLFilter) []interface{} {
+	if filter != nil && filter.Type != "" {
 		fi := make(map[string]interface{})
-
 		fi["urlobjects"] = flattenReferenceModel(&filter.UrlObjects)
 
 		urlcis := make([]interface{}, len(filter.UrlCategories))
@@ -185,8 +189,35 @@ func restoreReferenceObject(objects interface{}) []ftdc.ReferenceModel {
 				Type: i["type"].(string),
 				Name: i["name"].(string),
 			})
+			//fmt.Println(ros)
 		}
 		return ros
 	}
 	return nil
+}
+
+func restoreReferenceObjectSet(objects interface{}) []ftdc.ReferenceModel {
+	if objects != nil {
+		obj := objects.(*schema.Set)
+		var ros []ftdc.ReferenceModel
+		for _, object := range obj.List() {
+			i := object.(map[string]interface{})
+
+			ros = append(ros, ftdc.ReferenceModel{
+				ID:   i["id"].(string),
+				Type: i["type"].(string),
+				Name: i["name"].(string),
+			})
+			//fmt.Println(ros)
+		}
+		return ros
+	}
+	return nil
+}
+
+func returnFirstIfExists(object []ftdc.ReferenceModel) ftdc.ReferenceModel {
+	if object != nil {
+		return object[0]
+	}
+	return ftdc.ReferenceModel{}
 }

@@ -31,7 +31,7 @@ func resourceAccessRule() *schema.Resource {
 				Description: "A non editable Long object which holds the rule ID number of the FTDRulebase object. It is created by the system in the POST request, and the same value must be included in the PUT request.",
 			},
 			"sourcezones": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set of ZoneBase objects considered as a source zone.",
 				Elem: &schema.Resource{
@@ -42,7 +42,8 @@ func resourceAccessRule() *schema.Resource {
 						},
 						"type": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
+							Default:  "securityzone",
 						},
 						"name": {
 							Type:     schema.TypeString,
@@ -52,7 +53,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"destinationzones": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set of ZoneBase objects considered considered as a destination zone.",
 				Elem: &schema.Resource{
@@ -63,7 +64,8 @@ func resourceAccessRule() *schema.Resource {
 						},
 						"type": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
+							Default:  "securityzone",
 						},
 						"name": {
 							Type:     schema.TypeString,
@@ -73,7 +75,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"sourcenetworks": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set of Network objects considered as a source network.",
 				Elem: &schema.Resource{
@@ -94,7 +96,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"destinationnetworks": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set of Network objects considered as a destination network.",
 				Elem: &schema.Resource{
@@ -115,7 +117,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"sourceports": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set of PortObjectBase objects considered as a source port.",
 				Elem: &schema.Resource{
@@ -136,7 +138,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"destinationports": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set of PortObjectBase objects considered as a destination port.",
 				Elem: &schema.Resource{
@@ -172,7 +174,7 @@ func resourceAccessRule() *schema.Resource {
 				Description: "A mandatory EventLogAction object that defines the logging options for the rule. Possible values are: ['LOG_FLOW_END', 'LOG_BOTH', 'LOG_NONE']",
 			},
 			"identitysources": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A Set object containing TrafficIdentity objects. A TrafficIdentity object represents an ActiveDirectoryRealm or LocalIdentitySource. Allowed types are: [ActiveDirectoryRealm, LDAPRealm, LocalIdentitySource, SpecialRealm, User]",
 				Elem: &schema.Resource{
@@ -193,7 +195,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"users": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -234,13 +236,13 @@ func resourceAccessRule() *schema.Resource {
 			},
 			"embeddedappfilter": {
 				Type:        schema.TypeList,
-				Required:    true,
+				Optional:    true,
 				MaxItems:    1,
 				Description: "An optional EmbeddedAppFilter object. Providing an object will make the rule be applied only to traffic matching provided app filter's condition(s).",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"applications": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Optional:    true,
 							Description: "A list of applications",
 							Elem: &schema.Resource{
@@ -262,7 +264,7 @@ func resourceAccessRule() *schema.Resource {
 							},
 						},
 						"applicationfilters": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Optional:    true,
 							Description: "A list of application filters",
 							Elem: &schema.Resource{
@@ -284,13 +286,13 @@ func resourceAccessRule() *schema.Resource {
 							},
 						},
 						"conditions": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Optional:    true,
 							Description: "A list of application filter conditions",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"risks": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Optional:    true,
 										Description: "A list of application risks.",
 										Elem: &schema.Resource{
@@ -309,7 +311,7 @@ func resourceAccessRule() *schema.Resource {
 										},
 									},
 									"productivities": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Optional:    true,
 										Description: "A list of application business relevance values.",
 										Elem: &schema.Resource{
@@ -328,7 +330,7 @@ func resourceAccessRule() *schema.Resource {
 										},
 									},
 									"tags": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Optional:    true,
 										Description: "A list of application tags.",
 										Elem: &schema.Resource{
@@ -350,7 +352,7 @@ func resourceAccessRule() *schema.Resource {
 										},
 									},
 									"categories": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Optional:    true,
 										Description: "A list of application categories.",
 										Elem: &schema.Resource{
@@ -377,7 +379,7 @@ func resourceAccessRule() *schema.Resource {
 										Description: "A text string that matches application names. Field level constraints: must match pattern ^((?!;).)*$. (Note: Additional constraints might exist)",
 									},
 									"applicationtypes": {
-										Type:        schema.TypeList,
+										Type:        schema.TypeSet,
 										Optional:    true,
 										Description: "A list of application types",
 										Elem: &schema.Resource{
@@ -419,7 +421,7 @@ func resourceAccessRule() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"urlobjects": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Optional:    true,
 							Description: "A list of URLs included in this object.",
 							Elem: &schema.Resource{
@@ -440,7 +442,7 @@ func resourceAccessRule() *schema.Resource {
 							},
 						},
 						"urlcategories": {
-							Type:        schema.TypeList,
+							Type:        schema.TypeSet,
 							Optional:    true,
 							Description: "A list of URL categories included in this object.",
 							Elem: &schema.Resource{
@@ -559,7 +561,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"destinationdynamicobjects": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "An optional set of DynamicObject objects to match for destination traffic criteria.",
 				Elem: &schema.Resource{
@@ -580,7 +582,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"sourcedynamicobjects": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "An optional set of DynamicObject objects to match for source traffic criteria.",
 				Elem: &schema.Resource{
@@ -601,7 +603,7 @@ func resourceAccessRule() *schema.Resource {
 				},
 			},
 			"timerangeobjects": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: " An Optional TimeRange Object that specifies a time range.",
 				Elem: &schema.Resource{
@@ -709,7 +711,7 @@ func resourceAccessRuleRead(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
-	urlFilter := flattenurlFilter(&accessRule.UrlFilter)
+	urlFilter := flattenUrlFilter(&accessRule.UrlFilter)
 	if err := d.Set("urlfilter", urlFilter); err != nil {
 		return diag.FromErr(err)
 	}
@@ -752,24 +754,67 @@ func resourceAccessRuleCreate(ctx context.Context, d *schema.ResourceData, m int
 	c := m.(*ftdc.Client)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	var accessRule ftdc.AccessRule
+	accessRule := createAccessRule(d)
 
+	ar, err := c.CreateAccessRule(d.Get("accesspolicyid").(string), accessRule)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(ar.ID)
+
+	resourceAccessRuleRead(ctx, d, m)
+
+	return diags
+}
+
+func resourceAccessRuleUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	c := m.(*ftdc.Client)
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+	accessRule := createAccessRule(d)
+
+	ar, err := c.UpdateAccessRule(d.Get("accesspolicyid").(string), accessRule)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(ar.ID)
+
+	resourceAccessRuleRead(ctx, d, m)
+
+	return diags
+}
+
+func resourceAccessRuleDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	c := m.(*ftdc.Client)
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+	var accessRule ftdc.AccessRule
+	accessRule.ID = d.Get("id").(string)
+	err := c.DeleteAccessRule(d.Get("accesspolicyid").(string), accessRule)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	return diags
+}
+
+func createAccessRule(d *schema.ResourceData) ftdc.AccessRule {
+	var accessRule ftdc.AccessRule
 	accessRule.Version = d.Get("version").(string)
 	accessRule.Name = d.Get("name").(string)
 	accessRule.RuleID = d.Get("ruleid").(int)
-	accessRule.SourceZones = restoreReferenceObject(d.Get("sourcezones"))
-	accessRule.DestinationZones = restoreReferenceObject(d.Get("destinationzones"))
-	accessRule.SourceNetworks = restoreReferenceObject(d.Get("sourcenetworks"))
-	accessRule.DestinationNetworks = restoreReferenceObject(d.Get("destinationnetworks"))
-	accessRule.SourcePorts = restoreReferenceObject(d.Get("sourceports"))
-	accessRule.DestinationPorts = restoreReferenceObject(d.Get("destinationports"))
+	accessRule.SourceZones = restoreReferenceObjectSet(d.Get("sourcezones"))
+	accessRule.DestinationZones = restoreReferenceObjectSet(d.Get("destinationzones"))
+	accessRule.SourceNetworks = restoreReferenceObjectSet(d.Get("sourcenetworks"))
+	accessRule.DestinationNetworks = restoreReferenceObjectSet(d.Get("destinationnetworks"))
+	accessRule.SourcePorts = restoreReferenceObjectSet(d.Get("sourceports"))
+	accessRule.DestinationPorts = restoreReferenceObjectSet(d.Get("destinationports"))
 	accessRule.RulePosition = d.Get("ruleposition").(int)
 	accessRule.RuleAction = d.Get("ruleaction").(string)
 	accessRule.EventLogAction = d.Get("eventlogaction").(string)
-	accessRule.IdentitySources = restoreReferenceObject(d.Get("identitysources"))
+	accessRule.IdentitySources = restoreReferenceObjectSet(d.Get("identitysources"))
 
-	users := d.Get("users").([]interface{})
-	for _, user := range users {
+	users := d.Get("users").(*schema.Set)
+	for _, user := range users.List() {
 		u := user.(map[string]interface{})
 		accessRule.Users = append(accessRule.Users, ftdc.TrafficEntry{
 			Name:           u["name"].(string),
@@ -778,20 +823,20 @@ func resourceAccessRuleCreate(ctx context.Context, d *schema.ResourceData, m int
 		})
 	}
 
-	embeddedAppFilter := d.Get("embeddedappfilter").([]interface{})[0]
-	if embeddedAppFilter != nil {
+	embeddedAppFilters := d.Get("embeddedappfilter").([]interface{})
+	for _, embeddedAppFilter := range embeddedAppFilters {
 		eaf := embeddedAppFilter.(map[string]interface{})
-		accessRule.EmbeddedAppFilter.Applications = restoreReferenceObject(eaf["applications"])
-		accessRule.EmbeddedAppFilter.ApplicationFilters = restoreReferenceObject(eaf["applicationfilters"])
+		accessRule.EmbeddedAppFilter.Applications = restoreReferenceObjectSet(eaf["applications"])
+		accessRule.EmbeddedAppFilter.ApplicationFilters = restoreReferenceObjectSet(eaf["applicationfilters"])
 
-		conditions := eaf["conditions"].([]interface{})
-		for _, con := range conditions {
+		conditions := eaf["conditions"].(*schema.Set)
+		for _, con := range conditions.List() {
 			c := con.(map[string]interface{})
 			accessRule.EmbeddedAppFilter.Conditions = append(accessRule.EmbeddedAppFilter.Conditions, ftdc.ApplicationFilterCondition{
 				Risks: func(risks interface{}) []ftdc.RiskCondition {
 					if risks != nil {
 						var rs []ftdc.RiskCondition
-						for j, risk := range risks.([]interface{}) {
+						for j, risk := range risks.(*schema.Set).List() {
 							r := risk.(map[string]interface{})
 							rs[j].Risk = r["risk"].(string)
 							rs[j].Type = r["type"].(string)
@@ -803,7 +848,7 @@ func resourceAccessRuleCreate(ctx context.Context, d *schema.ResourceData, m int
 				Productivities: func(productivities interface{}) []ftdc.ProductivityCondition {
 					if productivities != nil {
 						var prs []ftdc.ProductivityCondition
-						for j, productivity := range productivities.([]interface{}) {
+						for j, productivity := range productivities.(*schema.Set).List() {
 							p := productivity.(map[string]interface{})
 							prs[j].Productivity = p["productivity"].(string)
 							prs[j].Type = p["type"].(string)
@@ -812,13 +857,13 @@ func resourceAccessRuleCreate(ctx context.Context, d *schema.ResourceData, m int
 					}
 					return nil
 				}(c["productivities"]),
-				Tags:       restoreReferenceObject(c["tags"]),
-				Categories: restoreReferenceObject(c["categories"]),
+				Tags:       restoreReferenceObjectSet(c["tags"]),
+				Categories: restoreReferenceObjectSet(c["categories"]),
 				Filter:     c["filter"].(string),
 				ApplicationTypes: func(applicationtypes interface{}) []ftdc.TypeCondition {
 					if applicationtypes != nil {
 						var apts []ftdc.TypeCondition
-						for j, appt := range applicationtypes.([]interface{}) {
+						for j, appt := range applicationtypes.(*schema.Set).List() {
 							a := appt.(map[string]interface{})
 							apts[j].ApplicationType = a["applicationtype"].(string)
 							apts[j].Type = a["type"].(string)
@@ -833,49 +878,31 @@ func resourceAccessRuleCreate(ctx context.Context, d *schema.ResourceData, m int
 		accessRule.EmbeddedAppFilter.Type = eaf["type"].(string)
 	}
 
-	urlFilters := d.Get("urlfilter").([]interface{})[0]
-	urlFilter := urlFilters.(map[string]interface{})
-	accessRule.UrlFilter.UrlObjects = restoreReferenceObject(urlFilter["urlobjects"])
-	urlcategories := urlFilter["urlcategories"].([]interface{})[0]
-	urlcategory := urlcategories.(map[string]interface{})
-	accessRule.UrlFilter.UrlCategories = append(accessRule.UrlFilter.UrlCategories, ftdc.URLCategoryMatcher{
-		UrlCategory:                 restoreReferenceObject(urlcategory["urlcategory"])[0],
-		UrlReputation:               restoreReferenceObject(urlcategory["urlreputation"])[0],
-		IncludeUnknownUrlReputation: urlcategory["includeunknownurlreputation"].(bool),
-		Type:                        urlcategory["type"].(string),
-	})
+	urlFilters := d.Get("urlfilter").([]interface{})
+	for _, urlf := range urlFilters {
+		urlFilter := urlf.(map[string]interface{})
+		accessRule.UrlFilter.UrlObjects = restoreReferenceObject(urlFilter["urlobjects"])
+		urlcategories := urlFilter["urlcategories"].(*schema.Set).List()
+		for _, urlc := range urlcategories {
+			urlcategory := urlc.(map[string]interface{})
+			accessRule.UrlFilter.UrlCategories = append(accessRule.UrlFilter.UrlCategories, ftdc.URLCategoryMatcher{
+				UrlCategory:                 returnFirstIfExists(restoreReferenceObject(urlcategory["urlcategory"])),
+				UrlReputation:               returnFirstIfExists(restoreReferenceObject(urlcategory["urlreputation"])),
+				IncludeUnknownUrlReputation: urlcategory["includeunknownurlreputation"].(bool),
+				Type:                        urlcategory["type"].(string),
+			})
+		}
+		accessRule.UrlFilter.Type = urlFilter["type"].(string)
+	}
 
-	accessRule.UrlFilter.Type = urlFilter["type"].(string)
-	accessRule.FilePolicy = restoreReferenceObject(d.Get("filepolicy"))[0]
+	accessRule.FilePolicy = returnFirstIfExists(restoreReferenceObject(d.Get("filepolicy")))
 	accessRule.LogFiles = d.Get("logfiles").(bool)
-	accessRule.SyslogServer = restoreReferenceObject("syslogserver")[0]
-	accessRule.DestinationDynamicObjects = restoreReferenceObject(d.Get("destinationdynamicobjects"))
-	accessRule.SourceDynamicObjects = restoreReferenceObject(d.Get("sourcedynamicobjects"))
-	accessRule.TimeRangeObjects = restoreReferenceObject(d.Get("timerangeobjects"))
+	accessRule.SyslogServer = returnFirstIfExists(restoreReferenceObject(d.Get("syslogserver")))
+	accessRule.DestinationDynamicObjects = restoreReferenceObjectSet(d.Get("destinationdynamicobjects"))
+	accessRule.SourceDynamicObjects = restoreReferenceObjectSet(d.Get("sourcedynamicobjects"))
+	accessRule.TimeRangeObjects = restoreReferenceObjectSet(d.Get("timerangeobjects"))
 	accessRule.ID = d.Get("id").(string)
 	accessRule.Type = d.Get("type").(string)
 
-	ar, err := c.CreateAccessRule(d.Get("accesspolicyid").(string), accessRule)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	d.SetId(ar.ID)
-
-	resourceAccessRuleRead(ctx, d, m)
-
-	return diags
-}
-
-func resourceAccessRuleUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-
-	// Warning or errors can be collected in a slice type
-	var diags diag.Diagnostics
-	return diags
-}
-
-func resourceAccessRuleDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-
-	// Warning or errors can be collected in a slice type
-	var diags diag.Diagnostics
-	return diags
+	return accessRule
 }

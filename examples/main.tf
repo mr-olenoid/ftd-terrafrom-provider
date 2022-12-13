@@ -73,3 +73,25 @@ resource "ftd_interface" "outside" {
       }
     }
 }
+
+resource "ftd_access_rule" "tf_test_rule"{
+  accesspolicyid = "c78e66bc-cb57-43fe-bcbf-96b79b3475b3"
+  name = "tf_test_rule"
+  ruleaction = "PERMIT"
+  eventlogaction = "LOG_BOTH"
+  sourcezones  {
+    name = ftd_security_zone.ft_sz_default_outside.name
+    id = ftd_security_zone.ft_sz_default_outside.id
+  }
+  sourcezones {
+    name = ftd_security_zone.ft_sz_outside.name
+    id = ftd_security_zone.ft_sz_outside.id
+  }
+  
+  destinationnetworks {
+    name = ftd_network_object.tf_ip_address.name
+    id = ftd_network_object.tf_ip_address.id
+    type = ftd_network_object.tf_ip_address.type
+  }
+  
+}

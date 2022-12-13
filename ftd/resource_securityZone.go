@@ -46,7 +46,7 @@ func resourceSecurityZone() *schema.Resource {
 				Default:  "securityzone",
 			},
 			"interfaces": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "A list of interfaces used inside this security zone. Allowed types are: [EtherChannelInterface, PhysicalInterface, SubInterface, VirtualTunnelInterface, VlanInterface]",
 				Elem: &schema.Resource{
@@ -116,7 +116,7 @@ func resourceSecurityZoneCreate(ctx context.Context, d *schema.ResourceData, m i
 	securityZone.Mode = d.Get("mode").(string)
 	securityZone.Type = d.Get("type").(string)
 
-	items := d.Get("interfaces").([]interface{})
+	items := d.Get("interfaces").(*schema.Set).List()
 	for _, item := range items {
 		i := item.(map[string]interface{})
 
@@ -173,7 +173,7 @@ func resourceSecurityZoneUpdate(ctx context.Context, d *schema.ResourceData, m i
 	securityZone.Mode = d.Get("mode").(string)
 	securityZone.Type = d.Get("type").(string)
 
-	items := d.Get("interfaces").([]interface{})
+	items := d.Get("interfaces").(*schema.Set).List()
 	for _, item := range items {
 		i := item.(map[string]interface{})
 
