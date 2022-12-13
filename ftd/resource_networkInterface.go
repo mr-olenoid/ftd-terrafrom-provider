@@ -181,11 +181,11 @@ func resourceInterface() *schema.Resource {
 			},
 			"tengigabitinterface": {
 				Type:     schema.TypeBool,
-				Optional: true,
+				Computed: true,
 			},
 			"gigabitinterface": {
 				Type:     schema.TypeBool,
-				Optional: true,
+				Computed: true,
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -240,6 +240,10 @@ func resourceInterfaceCreate(ctx context.Context, d *schema.ResourceData, m inte
 	d.Set("tengigabitinterface", iface.TenGigabitInterface)
 	d.Set("gigabitinterface", iface.GigabitInterface)
 	d.Set("type", iface.Type)
+
+	d.SetId(iface.ID)
+
+	resourceInterfaceRead(ctx, d, m)
 
 	return diags
 }

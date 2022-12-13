@@ -177,6 +177,37 @@ func flattenUrlFilter(filter *ftdc.EmbeddedURLFilter) []interface{} {
 	return make([]interface{}, 0)
 }
 
+func flattenDefaultAction(accessDefaultAction *ftdc.AccessDefaultAction) []interface{} {
+	if accessDefaultAction != nil && accessDefaultAction.Type != "" {
+		adai := make(map[string]interface{})
+
+		adai["action"] = accessDefaultAction.Action
+		adai["eventlogaction"] = accessDefaultAction.EventLogAction
+		adai["intrusionpolicy"] = flattenReferenceModel(&[]ftdc.ReferenceModel{accessDefaultAction.IntrusionPolicy})
+		adai["syslogserver"] = flattenReferenceModel(&[]ftdc.ReferenceModel{accessDefaultAction.SyslogServer})
+		adai["type"] = accessDefaultAction.Type
+
+		adais := make([]interface{}, 1)
+		adais[0] = adai
+		return adais
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenAdvancedSettings(advancedSettings *ftdc.AdvancedSettings) []interface{} {
+	if advancedSettings != nil && advancedSettings.Type != "" {
+		asi := make(map[string]interface{})
+
+		asi["dnsreputationenforcementenabled"] = advancedSettings.DnsReputationEnforcementEnabled
+		asi["type"] = advancedSettings.Type
+
+		asis := make([]interface{}, 1)
+		asis[0] = asi
+		return asis
+	}
+	return make([]interface{}, 0)
+}
+
 func restoreReferenceObject(objects interface{}) []ftdc.ReferenceModel {
 	if objects != nil {
 		obj := objects.([]interface{})

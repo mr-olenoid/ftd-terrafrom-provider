@@ -13,18 +13,18 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"username": &schema.Schema{
+			"username": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("FTD_USERNAME", nil),
 			},
-			"password": &schema.Schema{
+			"password": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("FTD_PASSWORD", nil),
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
@@ -36,6 +36,7 @@ func Provider() *schema.Provider {
 			"ftd_network_object": resourceNetworkObject(),
 			"ftd_interface":      resourceInterface(),
 			"ftd_access_rule":    resourceAccessRule(),
+			"ftd_access_policy":  resourceAccessPolicy(),
 		},
 		DataSourcesMap:       map[string]*schema.Resource{},
 		ConfigureContextFunc: providerConfigure,

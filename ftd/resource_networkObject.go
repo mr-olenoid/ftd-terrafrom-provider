@@ -18,23 +18,23 @@ func resourceNetworkObject() *schema.Resource {
 		UpdateContext: resourceNetworkObjectUpdate,
 		DeleteContext: resourceNetworkObjectDelete,
 		Schema: map[string]*schema.Schema{
-			"id": &schema.Schema{
+			"id": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"version": &schema.Schema{
+			"version": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"subtype": &schema.Schema{
+			"subtype": {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
@@ -48,16 +48,16 @@ func resourceNetworkObject() *schema.Resource {
 					return
 				},
 			},
-			"value": &schema.Schema{
+			"value": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"type": &schema.Schema{
+			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "networkobject",
 			},
-			"dnsresolution": &schema.Schema{
+			"dnsresolution": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},

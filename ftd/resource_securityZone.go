@@ -152,9 +152,6 @@ func resourceSecurityZoneDelete(ctx context.Context, d *schema.ResourceData, m i
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	// d.SetId("") is automatically called assuming delete returns no errors, but
-	// it is added here for explicitness.
-	d.SetId("")
 
 	return diags
 }
