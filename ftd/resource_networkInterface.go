@@ -278,22 +278,25 @@ func resourceInterfaceUpdate(ctx context.Context, d *schema.ResourceData, m inte
 	networkInterface.HardwareName = d.Get("hardwarename").(string)
 	networkInterface.MonitorInterface = d.Get("monitorinterface").(bool)
 
-	ipv4s := d.Get("ipv4").([]interface{})[0]
-	ipv4 := ipv4s.(map[string]interface{})
-	networkInterface.Ipv4.IpType = ipv4["iptype"].(string)
-	networkInterface.Ipv4.DefaultRouteUsingDHCP = ipv4["defaultrouteusingdhcp"].(bool)
-	networkInterface.Ipv4.DhcpRouteMetric = ipv4["dhcproutemetric"].(int)
-	networkInterface.Ipv4.Dhcp = ipv4["dhcp"].(bool)
-	networkInterface.Ipv4.AddressNull = ipv4["addressnull"].(bool)
-	networkInterface.Ipv4.Type = ipv4["type"].(string)
+	ipv4s := d.Get("ipv4").([]interface{})
+	for _, ipv4 := range ipv4s {
+		ip4 := ipv4.(map[string]interface{})
+		networkInterface.Ipv4.IpType = ip4["iptype"].(string)
+		networkInterface.Ipv4.DefaultRouteUsingDHCP = ip4["defaultrouteusingdhcp"].(bool)
+		networkInterface.Ipv4.DhcpRouteMetric = ip4["dhcproutemetric"].(int)
+		networkInterface.Ipv4.Dhcp = ip4["dhcp"].(bool)
+		networkInterface.Ipv4.AddressNull = ip4["addressnull"].(bool)
+		networkInterface.Ipv4.Type = ip4["type"].(string)
 
-	ipAddresses := ipv4["ipaddress"].([]interface{})[0]
-	ipAddress := ipAddresses.(map[string]interface{})
-	networkInterface.Ipv4.IpAddress.IpAddress = ipAddress["ipaddress"].(string)
-	networkInterface.Ipv4.IpAddress.Netmask = ipAddress["netmask"].(string)
-	networkInterface.Ipv4.IpAddress.StandbyIpAddress = ipAddress["standbyipaddress"].(string)
-	networkInterface.Ipv4.IpAddress.Type = ipAddress["type"].(string)
-
+		ipAddresses := ip4["ipaddress"].([]interface{})
+		for _, ipAddr := range ipAddresses {
+			ip := ipAddr.(map[string]interface{})
+			networkInterface.Ipv4.IpAddress.IpAddress = ip["ipaddress"].(string)
+			networkInterface.Ipv4.IpAddress.Netmask = ip["netmask"].(string)
+			networkInterface.Ipv4.IpAddress.StandbyIpAddress = ip["standbyipaddress"].(string)
+			networkInterface.Ipv4.IpAddress.Type = ip["type"].(string)
+		}
+	}
 	networkInterface.ManagementOnly = d.Get("managementonly").(bool)
 	networkInterface.ManagementInterface = d.Get("managementinterface").(bool)
 	networkInterface.Mode = d.Get("mode").(string)

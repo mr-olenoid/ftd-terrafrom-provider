@@ -59,6 +59,13 @@ resource "ftd_interface" "inside" {
   monitorinterface = true
 }
 
+resource "ftd_access_policy" "defaul_access_rule" {
+  defaultaction {
+    action = "PERMIT"
+    eventlogaction = "LOG_BOTH"
+  }
+}
+
 
 resource "ftd_interface" "outside" {
   name = "outside"
@@ -66,7 +73,6 @@ resource "ftd_interface" "outside" {
   monitorinterface = true
   description = "Hello from terraform"
   ctsenabled = true
-  gigabitinterface = true
   present = true
   ipv4 {
       addressnull = false
@@ -82,7 +88,7 @@ resource "ftd_interface" "outside" {
 }
 
 resource "ftd_access_rule" "tf_test_rule"{
-  accesspolicyid = "c78e66bc-cb57-43fe-bcbf-96b79b3475b3"
+  accesspolicyid = ftd_access_policy.defaul_access_rule.id
   name = "tf_test_rule"
   ruleaction = "PERMIT"
   eventlogaction = "LOG_BOTH"
