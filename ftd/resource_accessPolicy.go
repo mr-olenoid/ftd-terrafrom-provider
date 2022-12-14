@@ -12,7 +12,9 @@ func resourceAccessPolicy() *schema.Resource {
 	return &schema.Resource{
 		ReadContext:   resourceAccessPolicyRead,
 		UpdateContext: resourceAccessPolicyUpdate,
-		Description:   "NGFW-Access-Policy parate for every access rule in Cisco FTD",
+		DeleteContext: resourceAccessPolicyDelete,
+		CreateContext: resourceAccessPolicyCreate,
+		Description:   "NGFW-Access-Policy parent for every access rule in Cisco FTD. Create will import defaul access policy",
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:     schema.TypeString,
@@ -316,6 +318,32 @@ func resourceAccessPolicyUpdate(ctx context.Context, d *schema.ResourceData, m i
 	d.SetId(ap.ID)
 
 	resourceSecurityZoneRead(ctx, d, m)
+
+	return diags
+}
+
+func resourceAccessPolicyDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	diags = append(diags, diag.Diagnostic{
+		Severity: diag.Error,
+		Summary:  "Access policy can not be deleted",
+		Detail:   "Access policy can not be deleted. Just updated.",
+	})
+
+	return diags
+}
+
+func resourceAccessPolicyCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	c := m.(*ftdc.Client)
+
+	accessPolicy, err := c.CreateAccessPolicy(d.Get("name").(string))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.SetId(accessPolicy.ID)
+	resourceAccessPolicyUpdate(ctx, d, m)
 
 	return diags
 }

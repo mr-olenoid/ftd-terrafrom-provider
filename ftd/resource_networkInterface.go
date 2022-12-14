@@ -209,41 +209,9 @@ func resourceInterfaceCreate(ctx context.Context, d *schema.ResourceData, m inte
 		return diag.FromErr(err)
 	}
 
-	d.Set("id", iface.ID)
-	d.Set("name", iface.Name)
-	d.Set("version", iface.Version)
-	d.Set("description", iface.Description)
-	d.Set("hardwarename", iface.HardwareName)
-	d.Set("monitorinterface", iface.MonitorInterface)
-
-	ipv4 := flattenInterfaceIPv4(&iface.Ipv4)
-	if err := d.Set("ipv4", ipv4); err != nil {
-		return diag.FromErr(err)
-	}
-	d.Set("managementonly", iface.ManagementOnly)
-	d.Set("managementinterface", iface.ManagementInterface)
-	d.Set("mode", iface.Mode)
-	d.Set("mtu", iface.Mtu)
-	d.Set("enabled", iface.Enabled)
-	d.Set("macaddress", iface.MacAddress)
-	d.Set("standbymacaddress", iface.StandbyMacAddress)
-
-	d.Set("ctsenabled", iface.CtsEnabled)
-	d.Set("fecmode", iface.FecMode)
-	d.Set("speedtype", iface.SpeedType)
-	d.Set("duplextype", iface.DuplexType)
-
-	d.Set("autoneg", iface.AutoNeg)
-	d.Set("breakoutcapable", iface.BreakOutCapable)
-	d.Set("present", iface.Present)
-	d.Set("splitinterface", iface.SplitInterface)
-	d.Set("tengigabitinterface", iface.TenGigabitInterface)
-	d.Set("gigabitinterface", iface.GigabitInterface)
-	d.Set("type", iface.Type)
-
 	d.SetId(iface.ID)
 
-	resourceInterfaceRead(ctx, d, m)
+	resourceInterfaceUpdate(ctx, d, m)
 
 	return diags
 }
