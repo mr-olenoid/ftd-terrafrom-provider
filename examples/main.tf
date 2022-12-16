@@ -22,7 +22,7 @@ resource "ftd_security_zone" "ft_sz" {
 }
 
 resource "ftd_security_zone" "ft_sz_outside" {
-  name = "imported"
+  name = "server_zone_dmz"
   mode = "ROUTED"
   /*
   interfaces {
@@ -57,11 +57,21 @@ resource "ftd_interface" "inside" {
   name = "inside"
   mode = "ROUTED"
   monitorinterface = true
+   ipv4 {
+          defaultrouteusingdhcp = false
+          dhcproutemetric       = 0 
+          iptype                = "STATIC"
+
+          ipaddress {
+              ipaddress = "192.168.45.1"
+              netmask   = "255.255.255.0"
+            }
+        }
 }
 
 resource "ftd_access_policy" "defaul_access_rule" {
   defaultaction {
-    action = "PERMIT"
+    action = "TRUST"
     eventlogaction = "LOG_BOTH"
   }
 }
@@ -75,7 +85,6 @@ resource "ftd_interface" "outside" {
   ctsenabled = true
   present = true
   ipv4 {
-      addressnull = false
       defaultrouteusingdhcp = true
       dhcproutemetric = 0
       iptype = "STATIC"
@@ -87,7 +96,7 @@ resource "ftd_interface" "outside" {
     }
 }
 
-resource "ftd_access_rule" "tf_test_rule"{
+resource "ftd_access_rule" "tf_test_rule" {
   accesspolicyid = ftd_access_policy.defaul_access_rule.id
   name = "tf_test_rule"
   ruleaction = "PERMIT"

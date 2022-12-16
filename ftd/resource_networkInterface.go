@@ -94,7 +94,7 @@ func resourceInterface() *schema.Resource {
 						},
 						"addressnull": {
 							Type:     schema.TypeBool,
-							Optional: true,
+							Computed: true,
 						},
 						"type": {
 							Type:     schema.TypeString,
@@ -141,6 +141,7 @@ func resourceInterface() *schema.Resource {
 			"ctsenabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Default:     true,
 				Description: "A boolean that indicates whether the propagation of Security Group Tag (SGT) is enabled on this interface or not.",
 			},
 			"fecmode": {
@@ -173,6 +174,7 @@ func resourceInterface() *schema.Resource {
 			"present": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Default:     true,
 				Description: "A boolean that indicates whether the interface is physically present.",
 			},
 			"splitinterface": {
@@ -211,7 +213,8 @@ func resourceInterfaceCreate(ctx context.Context, d *schema.ResourceData, m inte
 
 	d.SetId(iface.ID)
 
-	resourceInterfaceUpdate(ctx, d, m)
+	resourceInterfaceRead(ctx, d, m)
+	//resourceInterfaceUpdate(ctx, d, m)
 
 	return diags
 }
@@ -318,12 +321,10 @@ func resourceInterfaceUpdate(ctx context.Context, d *schema.ResourceData, m inte
 	networkInterface.GigabitInterface = d.Get("gigabitinterface").(bool)
 	networkInterface.Type = d.Get("type").(string)
 
-	n, err := c.UpdateNetworkInterface(networkInterface)
+	_, err := c.UpdateNetworkInterface(networkInterface)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
-	d.SetId(n.ID)
 
 	resourceSecurityZoneRead(ctx, d, m)
 

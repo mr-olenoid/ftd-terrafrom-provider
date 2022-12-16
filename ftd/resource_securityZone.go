@@ -180,12 +180,10 @@ func resourceSecurityZoneUpdate(ctx context.Context, d *schema.ResourceData, m i
 		})
 	}
 
-	z, err := c.UpdateSecurityZone(securityZone)
+	_, err := c.UpdateSecurityZone(securityZone)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
-	d.SetId(z.ID)
 
 	resourceSecurityZoneRead(ctx, d, m)
 

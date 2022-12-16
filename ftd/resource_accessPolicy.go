@@ -218,6 +218,9 @@ func resourceAccessPolicy() *schema.Resource {
 				Default:  "accesspolicy",
 			},
 		},
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
 	}
 }
 
@@ -297,7 +300,7 @@ func resourceAccessPolicyUpdate(ctx context.Context, d *schema.ResourceData, m i
 	accessPolicy.CertVisibilityEnabled = d.Get("certvisibilityenabled").(bool)
 	accessPolicy.NetworkAnalysisPolicy = returnFirstIfExists(restoreReferenceObject(d.Get("networkanalysispolicy")))
 
-	advancedSettings := d.Get("defaultaction").([]interface{})
+	advancedSettings := d.Get("advancedsettings").([]interface{})
 	for _, advancedSetting := range advancedSettings {
 		as := advancedSetting.(map[string]interface{})
 		accessPolicy.AdvancedSettings = ftdc.AdvancedSettings{
@@ -310,12 +313,10 @@ func resourceAccessPolicyUpdate(ctx context.Context, d *schema.ResourceData, m i
 	accessPolicy.SecurityIntelligence = returnFirstIfExists(restoreReferenceObject(d.Get("securityintelligence")))
 	accessPolicy.Type = d.Get("type").(string)
 
-	ap, err := c.UpdateAccessPolicy(accessPolicy)
+	_, err := c.UpdateAccessPolicy(accessPolicy)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
-	d.SetId(ap.ID)
 
 	resourceSecurityZoneRead(ctx, d, m)
 
@@ -343,7 +344,8 @@ func resourceAccessPolicyCreate(ctx context.Context, d *schema.ResourceData, m i
 	}
 
 	d.SetId(accessPolicy.ID)
-	resourceAccessPolicyUpdate(ctx, d, m)
+	resourceAccessPolicyRead(ctx, d, m)
+	//resourceAccessPolicyUpdate(ctx, d, m)
 
 	return diags
 }

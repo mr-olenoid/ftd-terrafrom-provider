@@ -86,7 +86,8 @@ func resourceAccessRule() *schema.Resource {
 						},
 						"type": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
+							Default:  "networkobject",
 						},
 						"name": {
 							Type:     schema.TypeString,
@@ -107,7 +108,8 @@ func resourceAccessRule() *schema.Resource {
 						},
 						"type": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
+							Default:  "networkobject",
 						},
 						"name": {
 							Type:     schema.TypeString,
@@ -773,11 +775,10 @@ func resourceAccessRuleUpdate(ctx context.Context, d *schema.ResourceData, m int
 	var diags diag.Diagnostics
 	accessRule := createAccessRule(d)
 
-	ar, err := c.UpdateAccessRule(d.Get("accesspolicyid").(string), accessRule)
+	_, err := c.UpdateAccessRule(d.Get("accesspolicyid").(string), accessRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.SetId(ar.ID)
 
 	resourceAccessRuleRead(ctx, d, m)
 
