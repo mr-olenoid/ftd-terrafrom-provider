@@ -107,6 +107,11 @@ resource "ftd_access_rule" "tf_test_rule" {
     id = ftd_security_zone.ft_sz_outside.id
   }
 
+  sourcezones {
+    name = ftd_security_zone.ft_sz.name
+    id = ftd_security_zone.ft_sz.id
+  }
+
   sourceports {
     name = data.ftd_tcp_udp_port.ssh.name
     id = data.ftd_tcp_udp_port.ssh.id

@@ -53,6 +53,15 @@ func dataSourceTcpUpdPortRead(ctx context.Context, d *schema.ResourceData, m int
 		return diag.FromErr(err)
 	}
 
+	if tcpUdpPort.ID == "" {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "No system defined port with such name",
+			Detail:   "No system defined port with such name",
+		})
+		return diags
+	}
+
 	d.Set("id", tcpUdpPort.ID)
 	d.Set("version", tcpUdpPort.Version)
 	d.Set("name", tcpUdpPort.Name)

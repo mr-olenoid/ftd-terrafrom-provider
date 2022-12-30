@@ -37,7 +37,7 @@ func Provider() *schema.Provider {
 			"ftd_interface":         resourceInterface(),
 			"ftd_access_rule":       resourceAccessRule(),
 			"ftd_access_policy":     resourceAccessPolicy(),
-			"ftd_tcp_upd_port_user": resourceTcpUdpPort(),
+			"ftd_tcp_udp_port_user": resourceTcpUdpPort(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"ftd_tcp_udp_port": dataSourceTcpUpdPort(),
