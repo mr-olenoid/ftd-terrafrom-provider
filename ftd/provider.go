@@ -32,13 +32,16 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"ftd_security_zone":  resourceSecurityZone(),
-			"ftd_network_object": resourceNetworkObject(),
-			"ftd_interface":      resourceInterface(),
-			"ftd_access_rule":    resourceAccessRule(),
-			"ftd_access_policy":  resourceAccessPolicy(),
+			"ftd_security_zone":     resourceSecurityZone(),
+			"ftd_network_object":    resourceNetworkObject(),
+			"ftd_interface":         resourceInterface(),
+			"ftd_access_rule":       resourceAccessRule(),
+			"ftd_access_policy":     resourceAccessPolicy(),
+			"ftd_tcp_upd_port_user": resourceTcpUdpPort(),
 		},
-		DataSourcesMap:       map[string]*schema.Resource{},
+		DataSourcesMap: map[string]*schema.Resource{
+			"ftd_tcp_udp_port": dataSourceTcpUpdPort(),
+		},
 		ConfigureContextFunc: providerConfigure,
 	}
 }

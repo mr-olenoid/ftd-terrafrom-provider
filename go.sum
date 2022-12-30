@@ -116,6 +116,12 @@ github.com/mr-olenoid/ftd-client v0.1.20 h1:c5F+r+0on5V7kmk29am/VkxeK8wj1z6N2RIB
 github.com/mr-olenoid/ftd-client v0.1.20/go.mod h1:kIUSv+cquALGEK91Kgvh4x5BzeGh/pxXOmr48KSa0yA=
 github.com/mr-olenoid/ftd-client v0.1.21 h1:QGz5YFqhBb55rKpI6WUq4zGqummtVT4dIWQ2sLIw3Ys=
 github.com/mr-olenoid/ftd-client v0.1.21/go.mod h1:kIUSv+cquALGEK91Kgvh4x5BzeGh/pxXOmr48KSa0yA=
+github.com/mr-olenoid/ftd-client v0.1.23 h1:5I8T02eBPpGSg075EEIEJ1I0A1y/qYopfChHRZSVFOY=
+github.com/mr-olenoid/ftd-client v0.1.23/go.mod h1:kIUSv+cquALGEK91Kgvh4x5BzeGh/pxXOmr48KSa0yA=
+github.com/mr-olenoid/ftd-client v0.1.25 h1:rvqTqNo+pH5ayVqjKvHmCbZtZe7cYROobwlFrvZ9djc=
+github.com/mr-olenoid/ftd-client v0.1.25/go.mod h1:kIUSv+cquALGEK91Kgvh4x5BzeGh/pxXOmr48KSa0yA=
+github.com/mr-olenoid/ftd-client v0.1.26 h1:yUzCWQVWPU2Xw0UaL7inj8yxzdS0LdqHozHlDB1bxMo=
+github.com/mr-olenoid/ftd-client v0.1.26/go.mod h1:kIUSv+cquALGEK91Kgvh4x5BzeGh/pxXOmr48KSa0yA=
 github.com/oklog/run v1.1.0 h1:GEenZ1cK0+q0+wsJew9qUg/DyD8k3JzYsZAi5gYi2mA=
 github.com/oklog/run v1.1.0/go.mod h1:sVPdnTZT1zYwAJeCMu2Th4T21pA3FPOQRfWjQlk7DVU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
