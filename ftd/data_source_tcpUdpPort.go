@@ -61,5 +61,7 @@ func dataSourceTcpUpdPortRead(ctx context.Context, d *schema.ResourceData, m int
 	d.Set("port", tcpUdpPort.Port)
 	d.Set("type", tcpUdpPort.Type)
 
+	d.SetId(tcpUdpPort.ID)
+
 	return diags
 }

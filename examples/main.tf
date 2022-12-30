@@ -106,6 +106,12 @@ resource "ftd_access_rule" "tf_test_rule" {
     name = ftd_security_zone.ft_sz_outside.name
     id = ftd_security_zone.ft_sz_outside.id
   }
+
+  sourceports {
+    name = data.ftd_tcp_udp_port.ssh.name
+    id = data.ftd_tcp_udp_port.ssh.id
+    type = data.ftd_tcp_udp_port.ssh.type
+  }
   
   destinationnetworks {
     name = ftd_network_object.tf_ip_address.name
