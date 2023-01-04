@@ -60,6 +60,7 @@ func resourceTcpUdpPortRead(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
+	d.Set("id", tcpUpdPort.ID)
 	d.Set("version", tcpUpdPort.Version)
 	d.Set("name", tcpUpdPort.Name)
 	d.Set("description", tcpUpdPort.Description)
@@ -76,6 +77,7 @@ func resourceTcpUdpPortCreate(ctx context.Context, d *schema.ResourceData, m int
 
 	var tcpUdpPort ftdc.TcpUdpPort
 
+	tcpUdpPort.ID = d.Get("id").(string)
 	tcpUdpPort.Name = d.Get("name").(string)
 	tcpUdpPort.Description = d.Get("description").(string)
 	tcpUdpPort.Port = d.Get("port").(string)
@@ -97,6 +99,7 @@ func resourceTcpUdpPortUpdate(ctx context.Context, d *schema.ResourceData, m int
 	c := m.(*ftdc.Client)
 	var tcpUdpPort ftdc.TcpUdpPort
 
+	tcpUdpPort.ID = d.Get("id").(string)
 	tcpUdpPort.Name = d.Get("name").(string)
 	tcpUdpPort.Description = d.Get("description").(string)
 	tcpUdpPort.Port = d.Get("port").(string)
@@ -117,6 +120,7 @@ func resourceTcpUdpPortDelete(ctx context.Context, d *schema.ResourceData, m int
 	c := m.(*ftdc.Client)
 	var tcpUdpPort ftdc.TcpUdpPort
 
+	tcpUdpPort.ID = d.Get("id").(string)
 	tcpUdpPort.Name = d.Get("name").(string)
 	tcpUdpPort.Description = d.Get("description").(string)
 	tcpUdpPort.Port = d.Get("port").(string)

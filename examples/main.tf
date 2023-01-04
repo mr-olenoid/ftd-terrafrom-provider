@@ -135,6 +135,11 @@ resource "ftd_access_rule" "tf_test_rule" {
       id = data.ftd_application.rdp.id
       type = data.ftd_application.rdp.type
     }
+    applicationfilters {
+      name = ftd_application_filter.remote.name
+      id = ftd_application_filter.remote.id
+      type = ftd_application_filter.remote.type
+    }
   }
   
 }

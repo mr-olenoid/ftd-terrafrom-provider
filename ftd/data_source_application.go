@@ -98,6 +98,7 @@ func dataSourceApplicationRead(ctx context.Context, d *schema.ResourceData, m in
 	for _, app := range *applications {
 		d.Set("id", app.ID)
 		d.Set("appid", app.AppId)
+		d.Set("name", app.Name)
 		d.Set("description", app.Description)
 		tags := flattenReferenceModel(&app.Tags)
 		if err := d.Set("tags", tags); err != nil {
