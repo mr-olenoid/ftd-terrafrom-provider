@@ -117,11 +117,24 @@ resource "ftd_access_rule" "tf_test_rule" {
     id = data.ftd_tcp_udp_port.ssh.id
     type = data.ftd_tcp_udp_port.ssh.type
   }
+  sourceports {
+    name = data.ftd_tcp_udp_port.imap.name
+    id = data.ftd_tcp_udp_port.imap.id
+    type = data.ftd_tcp_udp_port.imap.type
+  }
   
   destinationnetworks {
     name = ftd_network_object.tf_ip_address.name
     id = ftd_network_object.tf_ip_address.id
     type = ftd_network_object.tf_ip_address.type
+  }
+
+  embeddedappfilter {
+    applications {
+      name = data.ftd_application.rdp.name
+      id = data.ftd_application.rdp.id
+      type = data.ftd_application.rdp.type
+    }
   }
   
 }
