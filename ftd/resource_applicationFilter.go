@@ -208,7 +208,7 @@ func resourceApplicationFilterRead(ctx context.Context, d *schema.ResourceData, 
 	d.Set("issystemdefined", applicationFilter.IsSystemDefined)
 
 	condition := flattenConditions(&applicationFilter.Conditions)
-	if err := d.Set("condition", condition); err != nil {
+	if err := d.Set("conditions", condition); err != nil {
 		return diag.FromErr(err)
 	}
 

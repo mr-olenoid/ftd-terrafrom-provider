@@ -121,7 +121,7 @@ func flattenConditions(conditions *[]ftdc.ApplicationFilterCondition) []interfac
 				ri["type"] = risk.Type
 				ris[j] = ri
 			}
-			ci["risk"] = ris
+			ci["risks"] = ris
 
 			pis := make([]interface{}, len(condition.Productivities))
 			for j, productivities := range condition.Productivities {

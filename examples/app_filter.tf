@@ -10,5 +10,4 @@ resource "ftd_application_filter" "remote" {
     id = data.ftd_application.ssh.id
     type = data.ftd_application.ssh.type
   }
-
 }
