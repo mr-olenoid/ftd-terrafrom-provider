@@ -321,7 +321,7 @@ func createConditions(d *schema.ResourceData) []ftdc.ApplicationFilterCondition 
 					return apts
 				}
 				return nil
-			}(c["productivities"]),
+			}(c["applicationtypes"]),
 			Type: c["type"].(string),
 		})
 	}

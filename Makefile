@@ -3,7 +3,7 @@ HOSTNAME=github.com
 NAMESPACE=mr-olenoid
 NAME=ftd
 BINARY=terraform-provider-${NAME}.exe
-VERSION=0.2.73
+VERSION=0.2.84
 OS_ARCH=windows_amd64
 
 default: install

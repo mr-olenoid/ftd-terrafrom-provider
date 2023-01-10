@@ -836,7 +836,7 @@ func createAccessRule(d *schema.ResourceData) ftdc.AccessRule {
 			accessRule.EmbeddedAppFilter.Conditions = append(accessRule.EmbeddedAppFilter.Conditions, ftdc.ApplicationFilterCondition{
 				Risks: func(risks interface{}) []ftdc.RiskCondition {
 					if risks != nil {
-						var rs []ftdc.RiskCondition
+						rs := make([]ftdc.RiskCondition, len(risks.(*schema.Set).List()))
 						for j, risk := range risks.(*schema.Set).List() {
 							r := risk.(map[string]interface{})
 							rs[j].Risk = r["risk"].(string)
@@ -848,7 +848,7 @@ func createAccessRule(d *schema.ResourceData) ftdc.AccessRule {
 				}(c["risks"]),
 				Productivities: func(productivities interface{}) []ftdc.ProductivityCondition {
 					if productivities != nil {
-						var prs []ftdc.ProductivityCondition
+						prs := make([]ftdc.ProductivityCondition, len(productivities.(*schema.Set).List()))
 						for j, productivity := range productivities.(*schema.Set).List() {
 							p := productivity.(map[string]interface{})
 							prs[j].Productivity = p["productivity"].(string)
@@ -863,7 +863,7 @@ func createAccessRule(d *schema.ResourceData) ftdc.AccessRule {
 				Filter:     c["filter"].(string),
 				ApplicationTypes: func(applicationtypes interface{}) []ftdc.TypeCondition {
 					if applicationtypes != nil {
-						var apts []ftdc.TypeCondition
+						apts := make([]ftdc.TypeCondition, len(applicationtypes.(*schema.Set).List()))
 						for j, appt := range applicationtypes.(*schema.Set).List() {
 							a := appt.(map[string]interface{})
 							apts[j].ApplicationType = a["applicationtype"].(string)
@@ -872,7 +872,7 @@ func createAccessRule(d *schema.ResourceData) ftdc.AccessRule {
 						return apts
 					}
 					return nil
-				}(c["productivities"]),
+				}(c["applicationtypes"]),
 				Type: c["type"].(string),
 			})
 		}
@@ -904,6 +904,8 @@ func createAccessRule(d *schema.ResourceData) ftdc.AccessRule {
 	accessRule.TimeRangeObjects = restoreReferenceObjectSet(d.Get("timerangeobjects"))
 	accessRule.ID = d.Get("id").(string)
 	accessRule.Type = d.Get("type").(string)
+
+	//fmt.Println(accessRule)
 
 	return accessRule
 }

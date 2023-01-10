@@ -41,8 +41,9 @@ func Provider() *schema.Provider {
 			"ftd_application_filter": resourceApplicationFilter(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"ftd_tcp_udp_port": dataSourceTcpUpdPort(),
-			"ftd_application":  dataSourceApplication(),
+			"ftd_tcp_udp_port":         dataSourceTcpUpdPort(),
+			"ftd_application":          dataSourceApplication(),
+			"ftd_application_category": dataSourceApplicationCategory(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

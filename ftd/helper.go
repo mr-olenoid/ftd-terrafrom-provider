@@ -138,11 +138,11 @@ func flattenConditions(conditions *[]ftdc.ApplicationFilterCondition) []interfac
 			ais := make([]interface{}, len(condition.ApplicationTypes))
 			for j, risk := range condition.ApplicationTypes {
 				ai := make(map[string]interface{})
-				ai["risk"] = risk.ApplicationType
+				ai["applicationtype"] = risk.ApplicationType
 				ai["type"] = risk.Type
 				ais[j] = ai
 			}
-			ci["applicationtypes"] = ris
+			ci["applicationtypes"] = ais
 
 			cis[i] = ci
 		}

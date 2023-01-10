@@ -140,6 +140,16 @@ resource "ftd_access_rule" "tf_test_rule" {
       id = ftd_application_filter.remote.id
       type = ftd_application_filter.remote.type
     }
+    conditions {
+      risks {
+        risk = "VERY_LOW"
+      }
+      categories {
+        name = data.ftd_application_category.ad.name
+        id = data.ftd_application_category.ad.id
+        type = data.ftd_application_category.ad.type
+      }
+    }
   }
   
 }
